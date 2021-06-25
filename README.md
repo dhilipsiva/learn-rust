@@ -1,2 +1,2 @@
 # learn-rust
-My mu rest learningns
+My rust learnings
