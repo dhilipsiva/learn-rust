@@ -1,7 +1,7 @@
 [package]
 name = "learn-rust"
 version = "0.1.0"
-edition = "2021"
+edition = "2018"
 authors = ["dhilipsiva <dhilipsiva@pm.me>"]
 description = "Code that I wrote while learning Rust from the Rust Book"
 license = "MIT"
