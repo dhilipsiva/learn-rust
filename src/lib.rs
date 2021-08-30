@@ -1,3 +1,7 @@
+//! This is my first RustDoc
+/// foo is a function
+pub fn foo() {}
+
 #[cfg(test)]
 mod tests {
     #[test]
