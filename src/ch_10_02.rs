@@ -13,30 +13,28 @@ fn largest<T: PartialOrd>(list: &[T]) -> &T {
     &largest
 }
 
+trait RectangleHelper: Mul<Output = Self> + Clone + Into<f64> {}
+impl<T: Mul<Output = T> + Clone + Into<f64>> RectangleHelper for T {}
+
 #[derive(Debug)]
-struct Rectangle<T: Mul<Output = T> + Clone + Into<f64>, U: Mul<Output = U> + Clone + Into<f64>> {
+struct Rectangle<T, U> {
     width: T,
     height: U,
 }
 
-impl<T: Mul<Output = T> + Clone + Into<f64>, U: Mul<Output = U> + Clone + Into<f64>>
-    Rectangle<T, U>
-{
+impl<T: RectangleHelper, U: RectangleHelper> Rectangle<T, U> {
     fn area(&self) -> f64 {
-        &self.width.clone().into() * &self.height.clone().into()
+        self.width.clone().into() * self.height.clone().into()
     }
 }
 
-impl<T: Mul<Output = T> + Clone + Into<f64>, U: Mul<Output = U> + Clone + Into<f64>> PartialOrd
-    for Rectangle<T, U>
-{
+impl<T: RectangleHelper, U: RectangleHelper> PartialOrd for Rectangle<T, U> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.area().partial_cmp(&other.area())
     }
 }
-impl<T: Mul<Output = T> + Clone + Into<f64>, U: Mul<Output = U> + Clone + Into<f64>> PartialEq
-    for Rectangle<T, U>
-{
+
+impl<T: RectangleHelper, U: RectangleHelper> PartialEq for Rectangle<T, U> {
     fn eq(&self, other: &Self) -> bool {
         self.area() == other.area()
     }
