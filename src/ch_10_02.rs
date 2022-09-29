@@ -1,6 +1,7 @@
 use std::{
     cmp::{Ordering, PartialOrd},
     convert::Into,
+    fmt::Display,
 };
 fn largest<T: PartialOrd>(list: &[T]) -> &T {
     let mut largest = &list[0];
@@ -73,6 +74,33 @@ fn part_1() {
     );
 }
 
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        return Self { x, y };
+    }
+}
+
+impl<T: PartialOrd + Display> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+
+fn part2() {
+    let pair = Pair::new(5, 6);
+    pair.cmp_display();
+}
+
 pub fn ch_10_02() {
     part_1();
+    part2();
 }
