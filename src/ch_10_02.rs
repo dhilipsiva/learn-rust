@@ -9,7 +9,7 @@ fn largest<T: PartialOrd>(list: &[T]) -> &T {
             largest = item;
         }
     }
-    &largest
+    largest
 }
 
 trait RectangleHelper: Clone + Into<f64> {}
@@ -21,7 +21,11 @@ struct Rectangle<T, U> {
     height: U,
 }
 
-impl<T: RectangleHelper, U: RectangleHelper> Rectangle<T, U> {
+impl<T, U> Rectangle<T, U>
+where
+    T: RectangleHelper,
+    U: RectangleHelper,
+{
     fn area(&self) -> f64 {
         self.width.clone().into() * self.height.clone().into()
     }
@@ -65,6 +69,6 @@ pub fn ch_10_02() {
     println!(
         "The largest rectangle is {:?}; area: {}",
         result,
-        result.area()
+        result.area(),
     );
 }
