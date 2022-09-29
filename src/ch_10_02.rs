@@ -43,7 +43,7 @@ impl<T: RectangleHelper, U: RectangleHelper> PartialEq for Rectangle<T, U> {
     }
 }
 
-pub fn ch_10_02() {
+fn part_1() {
     let num_list = vec![1, 10, 30, 12, 4];
     println!("The largest int is {}", largest(&num_list));
 
@@ -71,4 +71,8 @@ pub fn ch_10_02() {
         result,
         result.area(),
     );
+}
+
+pub fn ch_10_02() {
+    part_1();
 }
