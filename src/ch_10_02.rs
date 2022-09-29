@@ -1,7 +1,6 @@
 use std::{
     cmp::{Ordering, PartialOrd},
     convert::Into,
-    ops::Mul,
 };
 fn largest<T: PartialOrd>(list: &[T]) -> &T {
     let mut largest = &list[0];
@@ -13,8 +12,8 @@ fn largest<T: PartialOrd>(list: &[T]) -> &T {
     &largest
 }
 
-trait RectangleHelper: Mul<Output = Self> + Clone + Into<f64> {}
-impl<T: Mul<Output = T> + Clone + Into<f64>> RectangleHelper for T {}
+trait RectangleHelper: Clone + Into<f64> {}
+impl<T: Clone + Into<f64>> RectangleHelper for T {}
 
 #[derive(Debug)]
 struct Rectangle<T, U> {
@@ -63,5 +62,9 @@ pub fn ch_10_02() {
         },
     ];
     let result = largest(&rect_list);
-    println!("The largest rectangle is {:?}", result);
+    println!(
+        "The largest rectangle is {:?}; area: {}",
+        result,
+        result.area()
+    );
 }
