@@ -28,7 +28,7 @@ fn search<'a>(query: &str, content: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
     for line in content.lines() {
         if line.contains(query) {
-            results.push(line)
+            results.push(line);
         }
     }
     return results;
