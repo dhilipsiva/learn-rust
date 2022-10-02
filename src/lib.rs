@@ -33,6 +33,7 @@ fn search<'a>(query: &str, content: &'a str) -> Vec<&'a str> {
     }
     return results;
 }
+
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let content = fs::read_to_string(config.file_path)?;
     dbg!(&content);
