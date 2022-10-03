@@ -1,4 +1,4 @@
-use std::thread;
+use std::{thread, time};
 
 #[derive(Debug)]
 enum ShirtColor {
@@ -53,4 +53,15 @@ pub fn ch_13_01() {
     thread::spawn(move || println!("From thread: {:?}", list))
         .join()
         .unwrap();
+
+    fn some_long_func() {
+        let duration = time::Duration::from_millis(10);
+        let start = time::Instant::now();
+
+        thread::sleep(duration);
+        let end = time::Instant::now();
+        dbg!(end.duration_since(start));
+    }
+
+    thread::spawn(some_long_func).join().unwrap();
 }
