@@ -8,30 +8,32 @@ pub fn eat_at_restaurant() {
     add_to_waitlist();
 }
 
-pub struct Config<'a> {
-    query: &'a String,
-    file_path: &'a String,
+pub struct Config {
+    query: String,
+    file_path: String,
 }
 
-impl<'a> Config<'a> {
-    pub fn build(args: &'a Vec<String>) -> Result<Config<'a>, &'static str> {
-        if args.len() < 3 {
-            return Err("Not enough arguments");
-        }
-        let query = args.get(1).unwrap();
-        let file_path = args.get(2).unwrap();
+impl Config {
+    pub fn build(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
+        args.next();
+
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Did not get a query string"),
+        };
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Did not get a file path"),
+        };
         Ok(Config { query, file_path })
     }
 }
 
-fn search<'a>(query: &str, content: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-    for line in content.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-    return results;
+fn search<'a>(query: String, content: &'a String) -> Vec<&'a str> {
+    content
+        .lines()
+        .filter(|line| line.contains(&query))
+        .collect()
 }
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
@@ -49,11 +51,12 @@ mod test {
 
     #[test]
     fn one_result() {
-        let query = "foo";
+        let query = "foo".to_string();
         let content = "\
 limp fimp
 fimp foop
-gloop sloop";
-        assert_eq!(vec!["fimp foop"], search(query, content));
+gloop sloop"
+            .to_string();
+        assert_eq!(vec!["fimp foop"], search(query, &content));
     }
 }
