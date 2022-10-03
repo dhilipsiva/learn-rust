@@ -1,6 +1,6 @@
 [package]
 name = "ds-learn-rust"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["dhilipsiva <dhilipsiva@pm.me>"]
 description = "Code that I wrote while learning Rust from the Rust Book"
