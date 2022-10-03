@@ -57,7 +57,6 @@ pub fn ch_13_01() {
     fn some_long_func() {
         let duration = time::Duration::from_millis(10);
         let start = time::Instant::now();
-
         thread::sleep(duration);
         let end = time::Instant::now();
         dbg!(end.duration_since(start));
