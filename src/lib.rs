@@ -16,14 +16,17 @@ pub struct Config {
 impl Config {
     pub fn build(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
         args.next();
-
+        let default_config = Config {
+            query: String::from("de"),
+            file_path: String::from("Cargo.toml"),
+        };
         let query = match args.next() {
             Some(arg) => arg,
-            None => return Err("Did not get a query string"),
+            None => return Ok(default_config),
         };
         let file_path = match args.next() {
             Some(arg) => arg,
-            None => return Err("Did not get a file path"),
+            None => return Ok(default_config),
         };
         Ok(Config { query, file_path })
     }
