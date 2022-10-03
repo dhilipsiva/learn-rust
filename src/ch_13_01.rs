@@ -32,6 +32,33 @@ impl Inventory {
     }
 }
 
+fn fn_traits() {
+    // Test the Fn, FnOnce & FnMut traits
+
+    fn call_once<F, T>(func: F) -> T
+    where
+        F: FnOnce() -> T,
+    {
+        func()
+        // calling func() here fails; as expected!
+    }
+    let i = 10;
+    let call_once_func = move || i * 2;
+    let x = call_once(call_once_func);
+    let y = call_once(call_once_func); // works because i32 implements copy hence call_once_func is copy
+    let z = call_once_func(); // Also works becasuse of Copy
+
+    dbg!(i, x, y, z);
+
+    let s = String::from("hello");
+    let call_once_func = move || s;
+    let x = call_once(call_once_func);
+    // But the following lines will fail because call_once_func is now not a copy
+    // let y = call_once(call_once_func);
+    // let z = call_once_func();
+    dbg!(x);
+}
+
 pub fn ch_13_01() {
     let inventory = Inventory {
         shirts: vec![ShirtColor::Red, ShirtColor::Blue, ShirtColor::Red],
@@ -63,4 +90,6 @@ pub fn ch_13_01() {
     }
 
     thread::spawn(some_long_func).join().unwrap();
+
+    fn_traits();
 }
