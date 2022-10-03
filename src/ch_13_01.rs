@@ -57,6 +57,22 @@ fn fn_traits() {
     // let y = call_once(call_once_func);
     // let z = call_once_func();
     dbg!(x);
+
+    fn call_mut<F>(mut func: F)
+    where
+        F: FnMut(),
+    {
+        func();
+        func();
+    }
+
+    let mut s = String::from("Loop");
+
+    dbg!(&s);
+    let call_mut_func = || s.push('q');
+
+    call_mut(call_mut_func);
+    dbg!(&s);
 }
 
 pub fn ch_13_01() {
