@@ -3,6 +3,7 @@ use std::{
     convert::Into,
     fmt::Display,
 };
+
 fn largest<T: PartialOrd>(list: &[T]) -> &T {
     let mut largest = &list[0];
     for item in list {
