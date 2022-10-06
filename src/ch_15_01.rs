@@ -97,10 +97,100 @@ fn ch_15_04() {
     dbg!(a, b);
 }
 
+trait Messenger {
+    fn send(&self, text: &str);
+}
+
+struct LimitTracker<'a, T: Messenger> {
+    //TODO: use `dyn instead of generic keyword`
+    messenger: &'a T,
+    value: usize,
+    max: usize,
+}
+
+impl<'a, T: Messenger> LimitTracker<'a, T> {
+    fn new(messenger: &T, max: usize) -> LimitTracker<T> {
+        LimitTracker {
+            messenger,
+            max,
+            value: 0,
+        }
+    }
+    fn set_value(&mut self, value: usize) {
+        self.value = value;
+        let percentage_of_max = self.value as f64 / self.max as f64;
+
+        if percentage_of_max >= 1.0 {
+            self.messenger.send("Error: You are over your quota!");
+        } else if percentage_of_max >= 0.9 {
+            self.messenger
+                .send("Urgent warning: You've used up over 90% of your quota!");
+        } else if percentage_of_max >= 0.75 {
+            self.messenger
+                .send("Warning: You've used up over 75% of your quota!");
+        }
+    }
+}
+
+#[derive(Debug)]
+struct MyMessenger {}
+
+impl MyMessenger {
+    fn new() -> MyMessenger {
+        MyMessenger {}
+    }
+}
+impl Messenger for MyMessenger {
+    fn send(&self, text: &str) {
+        dbg!(self, text);
+    }
+}
+
+fn ch_15_05() {
+    let messenger = MyMessenger::new();
+    let mut limit_tracker = LimitTracker::new(&messenger, 100);
+    limit_tracker.set_value(75);
+}
+
 pub fn ch_15_01() {
     basic_box();
     recurse_box();
     deref_examples();
     ch_15_02();
     ch_15_04();
+    ch_15_05();
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use std::cell::RefCell;
+
+    struct MockMessenger {
+        sent_texts: RefCell<Vec<String>>,
+    }
+
+    impl MockMessenger {
+        fn new() -> MockMessenger {
+            MockMessenger {
+                sent_texts: RefCell::new(vec![]),
+            }
+        }
+    }
+
+    impl Messenger for MockMessenger {
+        fn send(&self, text: &str) {
+            self.sent_texts.borrow_mut().push(String::from(text));
+        }
+    }
+
+    #[test]
+    fn test_it_warns_over_75() {
+        let messenger = MockMessenger::new();
+        let mut limit_tracker = LimitTracker::new(&messenger, 100);
+
+        limit_tracker.set_value(80);
+
+        assert_eq!(messenger.sent_texts.borrow().len(), 1);
+    }
 }
