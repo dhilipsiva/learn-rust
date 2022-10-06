@@ -1,4 +1,4 @@
-use std::ops::Deref;
+use std::{ops::Deref, rc::Rc};
 
 fn basic_box() {
     let b = Box::new(5);
@@ -72,9 +72,35 @@ fn ch_15_02() {
     println!("y not dropped yet!");
 }
 
+#[derive(Debug)]
+enum RcList {
+    Cons(i32, Rc<RcList>),
+    Nil,
+}
+
+impl Drop for RcList {
+    fn drop(&mut self) {
+        dbg!("dropping", self);
+    }
+}
+
+fn ch_15_04() {
+    let a = Rc::new(RcList::Cons(
+        5,
+        Rc::new(RcList::Cons(4, Rc::new(RcList::Nil))),
+    ));
+    let b = RcList::Cons(8, a.clone());
+    {
+        let c = RcList::Cons(10, a.clone());
+        dbg!(c);
+    }
+    dbg!(a, b);
+}
+
 pub fn ch_15_01() {
     basic_box();
     recurse_box();
     deref_examples();
     ch_15_02();
+    ch_15_04();
 }
