@@ -61,6 +61,7 @@ impl<T> Drop for MyBox<T> {
         println!("dropping T");
     }
 }
+
 fn ch_15_02() {
     let x = 5;
     let y = MyBox::new(x);
@@ -140,6 +141,7 @@ impl MyMessenger {
         MyMessenger {}
     }
 }
+
 impl Messenger for MyMessenger {
     fn send(&self, text: &str) {
         dbg!(self, text);
